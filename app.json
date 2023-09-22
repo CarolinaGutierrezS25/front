@@ -1,17 +1,25 @@
 {
   "expo": {
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ]
-    ],
     "name": "front-app",
     "slug": "front-app",
     "version": "1.0.0",
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "com.anonymous.frontapp"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.frontapp",
+        "infoPlist": {
+          "UIBackgroundModes": ["location", "fetch"]
+        }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "df64f880-5cf2-4f58-8814-2e080bfceb87"
+      }
+    }
   },
   "name": "front-app"
 }

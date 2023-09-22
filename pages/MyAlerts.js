@@ -1,36 +1,14 @@
 import { View, Text, StyleSheet, FlatList, ScrollView } from "react-native";
 import AlertCard from "../components/MyAlerts/AlertCard";
 import {useTheme} from '@rneui/themed'
-
+import {useAlert} from '../components/MyAlerts/AlertProvider';
 export default function MyAlerts() {
   const {theme} = useTheme();
-  const pruebaArray = 
-  [
-    {
-        id: '1',
-        fecha: '10-03-2020',
-        content: "Amet voluptate ipsum reprehenderit nisi reprehenderit minim consequat velit fugiat elit veniam labore eiusmod aliqua."
-    },    
-    {
-        id: '2',
-        fecha: '11-03-2020',
-        content: "Amet voluptate ipsum reprehenderit nisi reprehenderit minim consequat velit fugiat elit veniam labore eiusmod aliqua."
-    },    
-    {
-        id: '3',
-        fecha: '12-03-2020',
-        content: "Amet voluptate ipsum reprehenderit nisi reprehenderit minim consequat velit fugiat elit veniam labore eiusmod aliqua."
-    },
-    {
-        id: '4',
-        fecha: '13-03-2020',
-        content: "Amet voluptate ipsum reprehenderit nisi reprehenderit minim consequat velit fugiat elit veniam labore eiusmod aliqua."
-    },
+  const Alert = useAlert()
 
-  ];
   return (
     <FlatList
-      data={pruebaArray}
+      data={Alert}
       numColumns={2}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <AlertCard content={item.content} id={item.id} fecha={item.fecha}/>}

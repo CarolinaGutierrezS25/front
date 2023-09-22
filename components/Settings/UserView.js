@@ -1,19 +1,13 @@
-import { View,Text,StyleSheet,TouchableOpacity} from 'react-native'
-import {Avatar,useTheme,useThemeMode} from '@rneui/themed'
-import colors from '../assets/colors'
+import { View,Text,StyleSheet} from 'react-native'
+import {Icon,useTheme} from '@rneui/themed'
 
 export default function UserView({user, mail, image}) {
     const {theme} = useTheme();
-    const {mode,setMode} = useThemeMode();
-
-    const toggleMode = () =>{
-        mode != "dark"? setMode("dark") : setMode("light")
-    }
     return(
         <>
     <View style={styles.mainView}>
         <View>
-            <Avatar rounded source={{uri: image}} size={70}/>
+        <Icon name="account-circle" size={70} color={theme.colors.primary}/>
         </View>
         <View style={styles.textView}>
             <Text style={[styles.user,{color: theme.colors.black}]}>
@@ -24,7 +18,6 @@ export default function UserView({user, mail, image}) {
             </Text>
         </View>
     </View>
-        <TouchableOpacity style={styles.editBtn} onPress={toggleMode}><Text style={{color:theme.colors.primary,fontSize:17}}>Editar</Text></TouchableOpacity>
     </>
     )
 }
@@ -33,7 +26,7 @@ const styles = StyleSheet.create({
     mainView: {
         flexDirection: 'row',
         padding: 15,
-        paddingBottom: 5
+
     },
     textView: {
         justifyContent: 'center',

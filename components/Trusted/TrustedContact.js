@@ -1,11 +1,12 @@
-import { ListItem, Avatar,useTheme,Divider } from "@rneui/themed";
+import { ListItem, Icon,useTheme,Divider } from "@rneui/themed";
 import { TouchableOpacity,StyleSheet } from "react-native";
 import { useContext } from "react";
 import { NavigationContext } from "@react-navigation/native";
-import colors from '../assets/colors'
 
 export default function TrustedContact({name,tel,id,image}) {
+  
   const {theme} = useTheme();
+  
   const navigation = useContext(NavigationContext);
 
   const editProfile = () => {
@@ -15,7 +16,7 @@ export default function TrustedContact({name,tel,id,image}) {
   return (
     <TouchableOpacity onPress={editProfile} >
       <ListItem containerStyle={{backgroundColor: theme.colors.white}}>
-        <Avatar rounded source={{ uri: image }} size={45}/>
+      <Icon name="account-circle" size={45} color={theme.colors.primary}/>
         <ListItem.Content >
           <ListItem.Title style={styles.text}>{name}</ListItem.Title>
           <ListItem.Subtitle style={styles.tel}>{tel}</ListItem.Subtitle>

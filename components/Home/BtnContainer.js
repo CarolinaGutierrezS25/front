@@ -7,7 +7,7 @@ export default function BtnContainer({}) {
   const navigation = useContext(NavigationContext)
 
   const handleNav = () => {
-    navigation.navigate("Camera");
+    navigation.navigate("ButtonPressed");
   }
   return (
     <TouchableOpacity onPress={handleNav}> 

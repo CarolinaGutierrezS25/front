@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { useState } from "react";
-import colors from "../components/assets/colors";
 import { Icon, makeStyles } from "@rneui/themed";
 
 export default function CardView({ route, navigation }) {

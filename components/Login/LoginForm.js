@@ -2,33 +2,43 @@ import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Input, Icon, Button, Avatar } from "@rneui/themed";
 import { NavigationContext } from "@react-navigation/native";
 import { useContext } from "react";
+import { getAllPermissionsStatus } from "../../pages/Permissions";
 import colors from "../assets/colors";
-import font from '../assets/fonts'
+import font from "../assets/fonts";
 
 export default function LoginForm() {
   const navigation = useContext(NavigationContext);
+
   const handleView = (view) => {
     navigation.navigate(view);
   };
-  const goToForgot =() =>{
-    navigation.navigate("ForgotPassword");
-  }
-  const goToRegister = () =>{
-    navigation.navigate("Register");
-  }
-  const goToMain =() =>{
-    navigation.navigate("MainScreen");
+
+  async function ithaspermissions() {
+    const permissions = await getAllPermissionsStatus();
+    if (permissions) navigation.navigate("MainScreen");
+    else navigation.navigate("Permissions");
   }
   return (
     <View style={styles.mainView}>
       <View style={styles.form}>
         <View style={styles.avatarContainer}>
-          <Avatar rounded source={{ uri: "https://randomuser.me/api/portraits/men/36.jpg" }} size={150} />
+          <Avatar
+            rounded
+            source={{ uri: "https://randomuser.me/api/portraits/men/36.jpg" }}
+            size={150}
+          />
         </View>
         <View>
           <Input
             placeholder="Correo"
-            leftIcon={<Icon name="envelope" type="font-awesome" size={24} color={colors.primary} />}
+            leftIcon={
+              <Icon
+                name="envelope"
+                type="font-awesome"
+                size={24}
+                color={colors.primary}
+              />
+            }
             inputContainerStyle={{ borderBottomWidth: 0 }}
             errorStyle={{ height: 0 }}
             labelStyle={{ height: 0 }}
@@ -39,7 +49,14 @@ export default function LoginForm() {
           ></Input>
           <Input
             placeholder="Contraseña"
-            leftIcon={<Icon name="asterisk" type="font-awesome" size={24} color={colors.primary} />}
+            leftIcon={
+              <Icon
+                name="asterisk"
+                type="font-awesome"
+                size={24}
+                color={colors.primary}
+              />
+            }
             inputContainerStyle={{ borderBottomWidth: 0 }}
             errorStyle={{ height: 0 }}
             labelStyle={{ height: 0 }}
@@ -48,19 +65,28 @@ export default function LoginForm() {
             secureTextEntry
           ></Input>
         </View>
-        <View >
-          <TouchableOpacity onPress={goToForgot}>
-            <Text style={styles.forgotPass} >¿Olvidaste tu contraseña?</Text>
+        <View>
+          <TouchableOpacity onPress={(e) => handleView("ForgotPassword")}>
+            <Text style={styles.forgotPass}>¿Olvidaste tu contraseña?</Text>
           </TouchableOpacity>
         </View>
         <View>
-          <Button buttonStyle={styles.primaryButton} onPress={goToMain}>Iniciar Sesion</Button>
+          <Button
+            buttonStyle={styles.primaryButton}
+            onPress={async (e) => await ithaspermissions()}
+          >
+            Iniciar Sesion
+          </Button>
         </View>
       </View>
       <View style={styles.textContainer}>
-      <TouchableOpacity style={{flexDirection: 'row'}} onPress={goToRegister}>
-        <Text style ={styles.slogan}>¿Nuevo en la app? </Text><Text style={styles.registerText}>Registrate.</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={(e) => handleView("Register")}
+        >
+          <Text style={styles.slogan}>¿Nuevo en la app? </Text>
+          <Text style={styles.registerText}>Registrate.</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -108,22 +134,22 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   forgotPass: {
-    textAlign: 'right',
+    textAlign: "right",
     fontWeight: "300",
-    fontFamily: font.primary
+    fontFamily: font.primary,
   },
   textContainer: {
     backgroundColor: colors.blured,
     padding: 20,
     borderRadius: 10,
     marginTop: 15,
-    alignItems: 'center'
+    alignItems: "center",
   },
-  registerText:{
+  registerText: {
     fontWeight: "700",
     fontFamily: font.primary,
   },
-  slogan:{
-    fontFamily: font.primary
-  }
+  slogan: {
+    fontFamily: font.primary,
+  },
 });

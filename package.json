@@ -7,7 +7,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "clean": "expo start -c"
+    "clean": "expo start -c",
+    "device": "expo run:ios --device"
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
@@ -17,26 +18,29 @@
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
     "bootstrap": "^5.3.0",
-    "expo": "~48.0.10",
-    "expo-splash-screen": "~0.18.1",
+    "expo": "~48.0.18",
+    "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "18.2.0",
-    "react-native": "0.71.6",
-    "react-native-audio": "^4.3.0",
-    "react-native-camera": "^4.2.1",
+    "react-native": "0.71.8",
     "react-native-geolocation-service": "^5.3.1",
     "react-native-safe-area-context": "^4.5.1",
     "react-native-screens": "^3.20.0",
-    "react-native-side-drawer": "^2.1.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.10",
     "expo-camera": "~13.2.1",
     "expo-face-detector": "~12.1.1",
     "react-native-maps": "1.3.2",
     "expo-location": "~15.1.1",
-    "expo-image-picker": "~14.1.1"
+    "expo-image-picker": "~14.1.1",
+    "expo-av": "~13.2.1",
+    "expo-sms": "~11.2.1",
+    "expo-sensors": "~12.1.1",
+    "expo-contacts": "~12.0.1",
+    "expo-notifications": "~0.18.1",
+    "expo-task-manager": "~11.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -12,7 +12,6 @@ export default function SettingsList() {
     
     <View >
       <SettingsItem icon='person' type="Cuenta" view="Account"/>
-      <SettingsItem icon='notifications' type="Notificationes" view="Notifications"/>
       <SettingsItem icon='palette' type="Tema" view="Theme"/>
     </View>
   );
