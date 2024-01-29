@@ -1,9 +1,11 @@
 import { postRequest } from "../../helpers/axiosRequest";
+import { MainHttp } from "@env";
+
 
 async function login(loginData) {
   try {
     const { data } = await postRequest(
-      "https://appi.safetyguard.com.mx/user/login",
+      `${MainHttp}user/login`,
       loginData,
       { withCredentials: true }
     );
@@ -16,7 +18,7 @@ async function login(loginData) {
 async function logout() {
     try {
       const { data } = await postRequest(
-        "https://appi.safetyguard.com.mx/user/logout",
+        `${MainHttp}user/logout`,
         {},
         { withCredentials: true }
       );

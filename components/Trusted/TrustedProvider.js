@@ -42,5 +42,6 @@ function appReducer(users, action) {
   }
 }
 
-const users =[];
-;
+const users = async () => {
+  return await getContactList();
+};

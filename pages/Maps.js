@@ -4,8 +4,8 @@ import { StyleSheet, View, Image } from "react-native";
 import { Card, Text, useTheme, makeStyles } from "@rneui/themed";
 import * as Location from "expo-location";
 import axios from 'axios';
-import {postRequest} from '../helpers/axiosRequest';
-import CookieManager from '@react-native-cookies/cookies';
+import { MainHttp } from "@env";
+
 
 
 export default function Maps() {
@@ -56,12 +56,13 @@ export default function Maps() {
     text = console.log(JSON.stringify(location));
   }
   async function fetchingData(location){
-    const Maps = axios.post('https://appi.safetyguard.com.mx/incident/list', {latitude: location.coords.latitude,longitude: location.coords.longitude},{ withCredentials: true } )
+    const Maps = axios.post(`${MainHttp}incident/list`, {latitude: location.coords.latitude,longitude: location.coords.longitude},{ withCredentials: true } )
     .then(function (response) {
       setExampleMarkers(response.data);
     })
     .catch(function (error) {
       console.log(error);
+      setExampleMarkers([]);
     });
   }
   if (exampleMarkers==null)
@@ -84,7 +85,7 @@ export default function Maps() {
           }}
         >
           <Marker key={0} coordinate={location} pinColor="blue"></Marker>
-          {/* {exampleMarkers.map((item, index) => {
+          {exampleMarkers.map((item, index) => {
             return (
               <Marker key={index + 1} coordinate={item} title="Descripción">
                 <Callout tooltip style={styles.tooltip}>
@@ -110,7 +111,7 @@ export default function Maps() {
                 </Callout>
               </Marker>
             );
-          })} */}
+          })}
         </MapView>
         <View style={styles.band}>
           <Text style={styles.inner}>

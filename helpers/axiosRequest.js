@@ -9,5 +9,8 @@ async function getRequest(url, config) {
 async function putRequest(url, data, config) {
   return await axios.put(url, data, config);
 }
+async function deleteRequest(url, config) {
+  return await axios.delete(url, config);
+}
 
-export { postRequest,getRequest,putRequest };
+export { postRequest, getRequest, putRequest,deleteRequest };

@@ -15,7 +15,7 @@ export default function LoginForm() {
     navigation.navigate(view);
   };
 
-  async function ithaspermissions() {
+  async function itHasPermissions() {
     const permissions = await getAllPermissionsStatus();
     if (permissions) navigation.navigate("MainScreen");
     else navigation.navigate("Permissions");
@@ -24,7 +24,7 @@ export default function LoginForm() {
   async function loginGood() {
     try {
       // const ServerResponse = await login({ email: correo, password: password });
-      navigation.navigate("MainScreen");
+      itHasPermissions();
     } catch (error) {
       console.log(error);
     }
