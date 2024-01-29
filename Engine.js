@@ -22,6 +22,7 @@ import CardView from "./pages/CardView";
 
 import Permissions from "./pages/Permissions";
 import ButtonPressed from './pages/ButtonPressed';
+import Form from './pages/Form';
 
 export default function Engine() {
   const Stack = createNativeStackNavigator();
@@ -37,6 +38,7 @@ export default function Engine() {
         <Stack.Group>
           <Stack.Screen name="Permissions" component={Permissions} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="Form" component={Form} />
           <Stack.Screen
             name="TrustedEdit"
             component={TrustedEdit}
@@ -74,7 +76,7 @@ export default function Engine() {
           <Stack.Screen
             name="ButtonPressed"
             component={ButtonPressed}
-            options={{ title: "Camera" }}
+            options={{ title: "Camera" , headerShown: false,}}
           />
           <Stack.Screen
             name="DeleteAccount"
@@ -84,7 +86,7 @@ export default function Engine() {
           <Stack.Screen
             name="ChangePassword"
             component={ChangePassword}
-            options={{ title: "Cambiar Contraseña" }}
+            options={{ title: "Cambiar Contraseña"}}
           />
         </Stack.Group>
       </Stack.Navigator>

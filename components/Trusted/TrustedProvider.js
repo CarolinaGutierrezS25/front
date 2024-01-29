@@ -1,4 +1,5 @@
-import { createContext, useReducer,useContext } from "react";
+import { createContext, useReducer, useContext } from "react";
+import { getContactList } from "./TrustedService";
 
 const TrustedContext = createContext(null);
 
@@ -25,7 +26,7 @@ export function useTrustedDispatch() {
 }
 
 function appReducer(users, action) {
-  switch (action.type){
+  switch (action.type) {
     case "ADD":
       return [...users, action.payload];
     case "MOD":
@@ -41,23 +42,5 @@ function appReducer(users, action) {
   }
 }
 
-const users = [
-    {
-      id: "3333885404",
-      name: "luis",
-      tel: "3333885404",
-      image: "https://randomuser.me/api/portraits/men/36.jpg",
-    },
-    {
-      id: "3333880453",
-      name: "caro",
-      tel: "3333880453",
-      image: "https://randomuser.me/api/portraits/women/37.jpg",
-    },
-    {
-      id: "3388335402",
-      name: "alan",
-      tel: "3388335402",
-      image: "https://randomuser.me/api/portraits/men/37.jpg",
-    },
-  ];
+const users =[];
+;

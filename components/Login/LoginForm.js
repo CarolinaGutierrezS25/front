@@ -1,14 +1,16 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { Input, Icon, Button, Avatar } from "@rneui/themed";
 import { NavigationContext } from "@react-navigation/native";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { getAllPermissionsStatus } from "../../pages/Permissions";
 import colors from "../assets/colors";
 import font from "../assets/fonts";
+import { login } from "../Login/LoginService";
 
 export default function LoginForm() {
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
   const navigation = useContext(NavigationContext);
-
   const handleView = (view) => {
     navigation.navigate(view);
   };
@@ -17,6 +19,15 @@ export default function LoginForm() {
     const permissions = await getAllPermissionsStatus();
     if (permissions) navigation.navigate("MainScreen");
     else navigation.navigate("Permissions");
+  }
+
+  async function loginGood() {
+    try {
+      // const ServerResponse = await login({ email: correo, password: password });
+      navigation.navigate("MainScreen");
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <View style={styles.mainView}>
@@ -46,6 +57,7 @@ export default function LoginForm() {
             textContentType="emailAddress"
             inputMode="email"
             autoCapitalize="none"
+            onChangeText={(value) => setCorreo(value)}
           ></Input>
           <Input
             placeholder="Contraseña"
@@ -63,6 +75,7 @@ export default function LoginForm() {
             containerStyle={styles.inputContainer}
             textContentType="password"
             secureTextEntry
+            onChangeText={(value) => setPassword(value)}
           ></Input>
         </View>
         <View>
@@ -73,7 +86,7 @@ export default function LoginForm() {
         <View>
           <Button
             buttonStyle={styles.primaryButton}
-            onPress={async (e) => await ithaspermissions()}
+            onPress={async (e) => await loginGood()}
           >
             Iniciar Sesion
           </Button>

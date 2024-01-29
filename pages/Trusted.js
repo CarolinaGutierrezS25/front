@@ -3,17 +3,18 @@ import { View, ScrollView } from "react-native";
 import TrustedNew from "../components/Trusted/TrustedNew";
 import { makeStyles } from "@rneui/themed";
 import {useTrusted} from '../components/Trusted/TrustedProvider';
+import {useEffect} from 'react'
 
 export default function Trusted() {
   const users = useTrusted();
   const styles = useStyles();
 
+  useEffect(() => { console.log(process.env.MainHttp) },[])
+
   return (
       <View style={styles.mainView}>
         <ScrollView>
-          {users.map((user) => {
-            return <TrustedContact name={user.name} tel={user.tel} id={user.id} image={user.image} key={user.id}></TrustedContact>;
-          })}
+
           <TrustedNew></TrustedNew>
         </ScrollView>
       </View>

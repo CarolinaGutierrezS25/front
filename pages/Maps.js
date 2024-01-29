@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker,Callout } from "react-native-maps";
-import { StyleSheet, View,Image} from "react-native";
-import {Card,Text,useTheme} from '@rneui/themed';
+import MapView, { Marker, Callout } from "react-native-maps";
+import { StyleSheet, View, Image } from "react-native";
+import { Card, Text, useTheme, makeStyles } from "@rneui/themed";
 import * as Location from "expo-location";
+import axios from 'axios';
+import {postRequest} from '../helpers/axiosRequest';
+import CookieManager from '@react-native-cookies/cookies';
+
 
 export default function Maps() {
   const [location, setLocation] = useState(null);
   const [Initiallocation, setInitialLocation] = useState(null);
-
+  const [exampleMarkers, setExampleMarkers] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null);
-  const {theme} = useTheme();
+  const { theme } = useTheme();
+  const styles = useStyles();
 
   async function getCurrentPos() {
     let location1 = await Location.watchPositionAsync(
@@ -30,7 +35,6 @@ export default function Maps() {
   }
 
   useEffect(() => {
-
     (async () => {
       let { status: foregroundStatus } =
         await Location.requestForegroundPermissionsAsync();
@@ -40,10 +44,9 @@ export default function Maps() {
       }
       let location = await Location.getCurrentPositionAsync();
       setInitialLocation(location);
+      await fetchingData(location);
       getCurrentPos();
-    })()
-    
-    ;
+    })();
   }, []);
 
   let text = "Waiting..";
@@ -52,78 +55,100 @@ export default function Maps() {
   } else if (location) {
     text = console.log(JSON.stringify(location));
   }
-  const exampleMarkers = [
-    {
-      id: "0294870b-b981-473f-b8cb-82000872842d",
-      latitude: 20.699736,
-      longitude: -103.33622,
-      createdAt: "2023-09-01T03:03:22.000Z",
-      description: "null",
-      finished: false,
-    },
-    {
-      id: "0294870b-b981-473f-b8cb-82000872842d",
-      latitude: 20.76736,
-      longitude: -103.33622,
-      createdAt: "2023-09-01T03:03:22.000Z",
-      description: "null",
-      finished: false,
-    },
-    {
-      id: "0294870b-b981-473f-b8cb-82000872842d",
-      latitude: 20.76736,
-      longitude: -103.38622,
-      createdAt: "2023-09-01T03:03:22.000Z",
-      description: "Irure commodo consectetur eiusmod id mollit fugiat occaecat id proident irure adipisicing. Adipisicing pariatur est cupidatat ullamco aute anim adipisicing ullamco sint laboris esse tempor nulla. Do id aute sint adipisicing pariatur officia adipisicing excepteur consectetur qui sunt. Veniam id dolor amet laboris mollit est consequat.",
-      finished: false,
-    },
-  ];
-
-  if(!Initiallocation) return (<View><Text>Obteniendo localizacion</Text></View>)
+  async function fetchingData(location){
+    const Maps = axios.post('https://appi.safetyguard.com.mx/incident/list', {latitude: location.coords.latitude,longitude: location.coords.longitude},{ withCredentials: true } )
+    .then(function (response) {
+      setExampleMarkers(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  if (exampleMarkers==null)
+    return (
+      <View>
+        <Text>Obteniendo localizacion</Text>
+      </View>
+    );
 
   return (
-    <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        region={{
-          latitude:Initiallocation.coords.latitude,
-          longitude: Initiallocation.coords.longitude,
-          latitudeDelta: 0.04,
-          longitudeDelta: 0.1,
-        }}
-      >
-        <Marker key={0} coordinate={location} pinColor="blue">
-        </Marker>
-        {exampleMarkers.map((item, index) => {
-          return <Marker key={index+1} coordinate={item} title="Descripción" >
-            <Callout tooltip style={styles.tooltip}>
-            <Card>
-              <Card.Title>Incidente</Card.Title>
-              <Card.Divider></Card.Divider>
-              <Text><Text style={styles.text}>Fecha: </Text>{new Date(item.createdAt).toLocaleDateString()}</Text>
-              <Text><Text style={styles.text}>Hora: </Text>{new Date(item.createdAt).toLocaleTimeString()}</Text>
-              <Card.FeaturedSubtitle numberOfLines={5} style={{ color: theme.colors.grey1 }}><Text style={styles.text}>Descripción: </Text>{item.description}</Card.FeaturedSubtitle>
-            </Card>
-            </Callout>
-          </Marker>
-        })}
-      </MapView>
-    </View>
+    <>
+      <View style={styles.container}>
+        <MapView
+          style={styles.map}
+          region={{
+            latitude: Initiallocation.coords.latitude,
+            longitude: Initiallocation.coords.longitude,
+            latitudeDelta: 0.04,
+            longitudeDelta: 0.1,
+          }}
+        >
+          <Marker key={0} coordinate={location} pinColor="blue"></Marker>
+          {/* {exampleMarkers.map((item, index) => {
+            return (
+              <Marker key={index + 1} coordinate={item} title="Descripción">
+                <Callout tooltip style={styles.tooltip}>
+                  <Card style={styles.card}>
+                    <Card.Title>Incidente</Card.Title>
+                    <Card.Divider></Card.Divider>
+                    <Text>
+                      <Text style={styles.text}>Fecha: </Text>
+                      {new Date(item.createdAt).toLocaleDateString()}
+                    </Text>
+                    <Text>
+                      <Text style={styles.text}>Hora: </Text>
+                      {new Date(item.createdAt).toLocaleTimeString()}
+                    </Text>
+                    <Card.FeaturedSubtitle
+                      numberOfLines={5}
+                      style={{ color: theme.colors.grey1 }}
+                    >
+                      <Text style={styles.text}>Descripción: </Text>
+                      {item.description}
+                    </Card.FeaturedSubtitle>
+                  </Card>
+                </Callout>
+              </Marker>
+            );
+          })} */}
+        </MapView>
+        <View style={styles.band}>
+          <Text style={styles.inner}>
+            Haz click en una alerta para ver los detalles
+          </Text>
+        </View>
+      </View>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
+const useStyles = makeStyles((theme) => ({
   container: {
     flex: 1,
+    justifyContent: "flex-start",
   },
   map: {
     width: "100%",
     height: "100%",
+    position: "relative",
   },
-  tooltip:{
-    maxWidth:180,
+  tooltip: {
+    maxWidth: 180,
   },
-  text:{
-    fontWeight: 'bold'
-  }
-});
+  text: {
+    fontWeight: "bold",
+  },
+  band: {
+    padding: 10,
+    width: "80%",
+    left: "10%",
+    bottom: '10%',
+    // padding: 8,
+    // borderRadius: 10,
+    backgroundColor: theme.colors.white,
+    borderRadius: 10,
+  },
+  inner: {
+    textAlign: "center",
+  },
+}));
