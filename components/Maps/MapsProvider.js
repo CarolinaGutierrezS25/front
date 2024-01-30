@@ -1,20 +1,14 @@
 import { createContext, useContext } from "react";
-import axios from 'axios';
+import axios from "axios";
 const MapsContext = createContext(null);
 
-
 export default function MapsProvider({ children }) {
-  return (
-    <MapsContext.Provider value={Maps}>{children}</MapsContext.Provider>
-  );
+  return <MapsContext.Provider value={Maps}>{children}</MapsContext.Provider>;
 }
 
 export function useMaps() {
   return useContext(MapsContext);
 }
-
-
-
 
 // const Maps = [
 //   {

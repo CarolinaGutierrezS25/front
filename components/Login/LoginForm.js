@@ -6,6 +6,7 @@ import { getAllPermissionsStatus } from "../../pages/Permissions";
 import colors from "../assets/colors";
 import font from "../assets/fonts";
 import { login } from "../Login/LoginService";
+import {deleteTokenStorage} from '../../helpers/tokenServices';
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState("");
@@ -23,10 +24,11 @@ export default function LoginForm() {
 
   async function loginGood() {
     try {
-      // const ServerResponse = await login({ email: correo, password: password });
-      itHasPermissions();
+      await login({ email: correo, password: password });
+      await itHasPermissions();
     } catch (error) {
-      console.log(error);
+      await deleteTokenStorage();
+      console.log(error.toJSON());
     }
   }
   return (

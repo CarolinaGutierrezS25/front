@@ -1,12 +1,22 @@
 import { createContext, useReducer, useContext } from "react";
 import { getContactList } from "./TrustedService";
+import {useState,useEffect} from 'react'
 
 const TrustedContext = createContext(null);
 
 const TrustedDispatchContext = createContext(null);
 
 export default function TrustedProvider({ children }) {
+  const [users, setUsers] = useState([]);
   const [state, dispatch] = useReducer(appReducer, users);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getContactList();
+      setUsers(data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <TrustedContext.Provider value={state}>
@@ -42,6 +52,3 @@ function appReducer(users, action) {
   }
 }
 
-const users = async () => {
-  return await getContactList();
-};

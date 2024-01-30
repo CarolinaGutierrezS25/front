@@ -1,15 +1,19 @@
 import { postRequest } from "../../helpers/axiosRequest";
 import { MainHttp } from "@env";
+import {setTokenStorage} from '../../helpers/tokenServices';
 
 
 async function login(loginData) {
   try {
-    const { data } = await postRequest(
+    console.log(loginData)
+    console.log(`${MainHttp}user/login`)
+    const { data, status } = await postRequest(
       `${MainHttp}user/login`,
       loginData,
       { withCredentials: true }
     );
-    return data;
+      await setTokenStorage(data.data.expiresAt);
+      return data;
   } catch (error) {
     throw error;
   }
@@ -17,14 +21,16 @@ async function login(loginData) {
 
 async function logout() {
     try {
-      const { data } = await postRequest(
+      const { data,status } = await postRequest(
         `${MainHttp}user/logout`,
         {},
         { withCredentials: true }
       );
-      return data;
+      if (status === 200){
+        return data;
+      }
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 

@@ -21,23 +21,33 @@ import DeleteAccount from "./pages/DeleteAccount";
 import CardView from "./pages/CardView";
 
 import Permissions from "./pages/Permissions";
-import ButtonPressed from './pages/ButtonPressed';
-import Form from './pages/Form';
+import ButtonPressed from "./pages/ButtonPressed";
+import Form from "./pages/Form";
+
+import { getTokenStorage } from "./helpers/tokenServices";
 
 export default function Engine() {
   const Stack = createNativeStackNavigator();
+  const [token, setToken] = React.useState(false);
   const { theme } = useTheme();
+  React.useEffect(() => {
+    getTokenStorage().then((value) => {
+      setToken(value);
+    });
+  }, []);
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!token && (
+          <Stack.Group>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="Register" component={Register} />
+          </Stack.Group>
+        )}
         <Stack.Group>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-          <Stack.Screen name="Register" component={Register} />
-        </Stack.Group>
-        <Stack.Group>
-          <Stack.Screen name="Permissions" component={Permissions} />
           <Stack.Screen name="MainScreen" component={MainScreen} />
+          <Stack.Screen name="Permissions" component={Permissions} />
           <Stack.Screen name="Form" component={Form} />
           <Stack.Screen
             name="TrustedEdit"
@@ -76,7 +86,7 @@ export default function Engine() {
           <Stack.Screen
             name="ButtonPressed"
             component={ButtonPressed}
-            options={{ title: "Camera" , headerShown: false,}}
+            options={{ title: "Camera", headerShown: false }}
           />
           <Stack.Screen
             name="DeleteAccount"
@@ -86,7 +96,7 @@ export default function Engine() {
           <Stack.Screen
             name="ChangePassword"
             component={ChangePassword}
-            options={{ title: "Cambiar Contraseña"}}
+            options={{ title: "Cambiar Contraseña" }}
           />
         </Stack.Group>
       </Stack.Navigator>

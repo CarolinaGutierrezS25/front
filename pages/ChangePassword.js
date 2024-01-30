@@ -1,11 +1,20 @@
 import { View, StyleSheet, Text, KeyboardAvoidingView } from "react-native";
 import { Input, Icon, Button, Dialog, makeStyles } from "@rneui/themed";
 import { useState } from "react";
-import colors from "../components/assets/colors";
+import { changePassword } from "../components/Settings/SettingsService";
 
 export default function ChangePassword({ navigation }) {
   const [open, setOpen] = useState(false);
+  const [prevPass, setPrevPass] = useState(false);
+  const [correct, setCorrect] = useState(false);
+  const [currentPass, setCurrentPass] = useState(false);
   const styles = useStyles();
+
+  const comparePasswords = (value) => {
+    if (value === currentPass && value !== "" && currentPass !== "") {
+      setCorrect(true);
+    } else setCorrect(false);
+  };
   const handleChangePass = () => {
     toggleOpen();
   };
@@ -37,6 +46,7 @@ export default function ChangePassword({ navigation }) {
           autoCapitalize="none"
           secureTextEntry
           label="Contraseña Anterior"
+          onChangeText={(value) => setPrevPass(value)}
         ></Input>
         <Input
           placeholder="Contraseña"
@@ -56,6 +66,7 @@ export default function ChangePassword({ navigation }) {
           autoCapitalize="none"
           secureTextEntry
           label="Nueva contraseña"
+          onChangeText={(value) => setCurrentPass(value)}
         ></Input>
         <Input
           placeholder="Contraseña"
@@ -75,9 +86,11 @@ export default function ChangePassword({ navigation }) {
           autoCapitalize="none"
           secureTextEntry
           label="Confirma tu contraseña"
+          onChangeText={(value) => comparePasswords(value)}
         ></Input>
         <Button
           title="Confirmar"
+          disabled={!correct}
           containerStyle={styles.btn}
           type="clear"
           onPress={handleChangePass}

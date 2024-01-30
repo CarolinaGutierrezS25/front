@@ -24,6 +24,7 @@ export default class Register extends Component {
       password: "",
       confirmPassword: "",
       visible: false,
+      birthday: "1998-12-12",
       title: "Registro exitoso 🎉",
       message: 'Te haz regristrado correctamente, ahora puedes iniciar sesión.'
     };
