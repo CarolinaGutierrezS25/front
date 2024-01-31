@@ -1,21 +1,23 @@
 import { createContext, useReducer, useContext } from "react";
 import { getContactList } from "./TrustedService";
-import {useState,useEffect} from 'react'
+import { useState, useEffect } from "react";
+
+async function fetchData() {
+  const data = await getContactList();
+  return data;
+}
+const users = [];
 
 const TrustedContext = createContext(null);
 
 const TrustedDispatchContext = createContext(null);
 
 export default function TrustedProvider({ children }) {
-  const [users, setUsers] = useState([]);
   const [state, dispatch] = useReducer(appReducer, users);
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await getContactList();
-      setUsers(data);
-    }
-    fetchData();
+    dispatch({ type: "FETCH" });
+    console.log(state);
   }, []);
 
   return (
@@ -47,8 +49,12 @@ function appReducer(users, action) {
     case "DEL":
       console.log(action.payload);
       return users.filter((user) => user.id != action.payload);
+    case "FETCH":
+      let data2 = []
+      fetchData().then((data) => {console.log(data)});
+      console.log(data2);
+      return data2;
     default:
       return null;
   }
 }
-

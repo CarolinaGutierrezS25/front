@@ -8,11 +8,9 @@ import MapsProvider from './components/Maps/MapsProvider';
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <TrustedProvider>
         <AlertProvider>
             <Engine />
         </AlertProvider>
-      </TrustedProvider>
     </ThemeProvider>
   );
 }

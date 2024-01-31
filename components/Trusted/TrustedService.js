@@ -7,14 +7,13 @@ import { MainHttp } from "@env";
 
 async function getContactList() {
   try {
-    const contacts = await getRequest(`${MainHttp}contact/list`, {
-        withCredentials: true,
-      });
-    return contacts?.data || [];
+    const {data} = await getRequest(`${MainHttp}contact/list`, {
+      withCredentials: true,
+    });
+    return data.data;
   } catch (error) {
     console.log(error);
   }
-
 }
 async function addContact(data) {
   const contacts = await postRequest(`${MainHttp}contact/register`, data, {

@@ -2,22 +2,28 @@ import TrustedContact from "../components/Trusted/TrustedContact.js";
 import { View, ScrollView } from "react-native";
 import TrustedNew from "../components/Trusted/TrustedNew";
 import { makeStyles } from "@rneui/themed";
-import { useTrusted } from "../components/Trusted/TrustedProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getContactList } from "../components/Trusted/TrustedService";
 
 export default function Trusted() {
-  const users = useTrusted();
   const styles = useStyles();
+  const [users,setUsers] = useState([]);
 
   useEffect(() => {
-    console.log(users);
+    async function fetchUsers() {
+      const data = await getContactList();
+      setUsers(data);
+    }
+    fetchUsers();
   }, []);
+
+
 
   return (
     <View style={styles.mainView}>
       <ScrollView>
         {users.map((user) => (
-          <TrustedContact key={user.id} user={user}></TrustedContact>
+          <TrustedContact key={user.phone} user={user}></TrustedContact>
         ))}
         <TrustedNew></TrustedNew>
       </ScrollView>
