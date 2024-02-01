@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import { Input, Icon, Button, Avatar, makeStyles, Dialog } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import { useTrustedDispatch } from "../components/Trusted/TrustedProvider";
+import {toggleAccions} from '../pages/Trusted';
+
 
 export default function TrustedEdit({ navigation, route }) {
   const dispatch = useTrustedDispatch();
   const styles = useStyles();
 
   const [user, setUser] = useState(route.params);
-  const [image, setImage] = useState(null);
   const [edit, setEdit] = useState(false);
   const [dialog, setDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -17,20 +18,21 @@ export default function TrustedEdit({ navigation, route }) {
   const [isEdditedUser, setIsEdditedUser] = useState(false);
 
   useEffect(() => {
-    if (route.params?.id) setIsEdditedUser(true);
+    if (route.params?.phone) setIsEdditedUser(true);
+    console.log(isEdditedUser);
   }, []);
 
   const togglePress = () => {
     if (isEdditedUser) {
       if (!edit) setEdit(true);
       else {
-        dispatch({ type: "MOD", payload: user });
+        dispatch({ type: "MOD", payload: user ,prev: route.params.phone});
         setDialogMessage("Contacto modificado con éxito");
         setDialog(true);
       }
     } else {
       if (user) {
-        dispatch({ type: "ADD", payload: { ...user, id: user.tel } });
+        dispatch({ type: "ADD", payload: user  });
         setDialogMessage("Contacto añadido con éxito");
         setDialog(true);
       }
@@ -42,23 +44,8 @@ export default function TrustedEdit({ navigation, route }) {
     setDialog(true);
   };
   const handleDelete = () => {
-    dispatch({ type: "DEL", payload: user.id });
+    dispatch({ type: "DEL", payload: user.phone });
     navigation.goBack();
-  };
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      setUser((user) => ({ ...user, ...{ image: image } }));
-    }
   };
   const cancel = () => {
     navigation.goBack();
@@ -121,11 +108,11 @@ export default function TrustedEdit({ navigation, route }) {
                 labelStyle={{ height: 0 }}
                 containerStyle={styles.inputContainer}
                 textContentType="telephoneNumber"
-                defaultValue={user.tel}
+                defaultValue={user.phone}
                 inputMode="decimal"
                 disabled={!edit && isEdditedUser}
                 onChangeText={(value) =>
-                  setUser((user) => ({ ...user, ...{ tel: value } }))
+                  setUser((user) => ({ ...user, ...{ phone: value } }))
                 }
               ></Input>
             </View>

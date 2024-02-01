@@ -1,23 +1,22 @@
 import { createContext, useReducer, useContext } from "react";
-import { getContactList } from "./TrustedService";
+import { getContactList,addContact, delContact, modContact } from "./TrustedService";
 import { useState, useEffect } from "react";
 
-async function fetchData() {
-  const data = await getContactList();
-  return data;
-}
-const users = [];
 
 const TrustedContext = createContext(null);
 
 const TrustedDispatchContext = createContext(null);
 
 export default function TrustedProvider({ children }) {
+  const [users, setUsers] = useState([]);
   const [state, dispatch] = useReducer(appReducer, users);
 
   useEffect(() => {
-    dispatch({ type: "FETCH" });
-    console.log(state);
+    async function fetchUsers() {
+      const data = await getContactList();
+      dispatch({ type: "FETCH", payload: data });
+    }
+    fetchUsers();
   }, []);
 
   return (
@@ -40,21 +39,22 @@ export function useTrustedDispatch() {
 function appReducer(users, action) {
   switch (action.type) {
     case "ADD":
+      const contact = {contactName: action.payload.name, contactPhone: action.payload.phone};
+      addContact(contact).then((res) => console.log(res)).catch((err) => console.log(err.toJSON()));
       return [...users, action.payload];
     case "MOD":
+      const contactMod = {previousPhone: action.prev, newPhone: action.payload.phone, contactName: action.payload.name};
+      modContact(contactMod).then((res) => console.log(res)).catch((err) => console.log(err.toJSON()));
       return users.map((user) => {
-        if (user.id == action.payload.id) return action.payload;
+        if (user.phone == action.prev) return action.payload;
         return user;
       });
-    case "DEL":
-      console.log(action.payload);
-      return users.filter((user) => user.id != action.payload);
+      case "DEL":
+      delContact(action.payload).then((res) => console.log(res)).catch((err) => console.log(err.toJSON()));
+      return users.filter((user) => user.phone != action.payload);
     case "FETCH":
-      let data2 = []
-      fetchData().then((data) => {console.log(data)});
-      console.log(data2);
-      return data2;
-    default:
+      return action.payload;
+      default:
       return null;
   }
 }

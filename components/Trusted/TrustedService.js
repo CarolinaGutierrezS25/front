@@ -7,7 +7,7 @@ import { MainHttp } from "@env";
 
 async function getContactList() {
   try {
-    const {data} = await getRequest(`${MainHttp}contact/list`, {
+    const { data } = await getRequest(`${MainHttp}contact/list`, {
       withCredentials: true,
     });
     return data.data;
@@ -16,22 +16,22 @@ async function getContactList() {
   }
 }
 async function addContact(data) {
-  const contacts = await postRequest(`${MainHttp}contact/register`, data, {
+  await postRequest(`${MainHttp}contact/register`, data, {
     withCredentials: true,
   });
-  return contacts?.data || [];
+  return true;
 }
 async function modContact(data) {
-  const contacts = await postRequest(`${MainHttp}contact/list`, data, {
+  await postRequest(`${MainHttp}contact/edit`, data, {
     withCredentials: true,
   });
-  return contacts?.data || [];
+  return true;
 }
 async function delContact(phoneNumber) {
-  const contacts = await deleteRequest(`${MainHttp}contact/${phoneNumber}`, {
+  await deleteRequest(`${MainHttp}contact/${phoneNumber}`, {
     withCredentials: true,
   });
-  return contacts?.data || [];
+  return true;
 }
 
-export { getContactList };
+export { getContactList, addContact, modContact, delContact };

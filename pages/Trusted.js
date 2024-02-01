@@ -4,20 +4,11 @@ import TrustedNew from "../components/Trusted/TrustedNew";
 import { makeStyles } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import { getContactList } from "../components/Trusted/TrustedService";
+import { useTrusted } from "../components/Trusted/TrustedProvider";
 
 export default function Trusted() {
   const styles = useStyles();
-  const [users,setUsers] = useState([]);
-
-  useEffect(() => {
-    async function fetchUsers() {
-      const data = await getContactList();
-      setUsers(data);
-    }
-    fetchUsers();
-  }, []);
-
-
+  const users = useTrusted();
 
   return (
     <View style={styles.mainView}>

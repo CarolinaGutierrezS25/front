@@ -3,13 +3,13 @@ import { TouchableOpacity, StyleSheet } from "react-native";
 import { useContext } from "react";
 import { NavigationContext } from "@react-navigation/native";
 
-export default function TrustedContact({ user }) {
+export default function TrustedContact({user}) {
   const { theme } = useTheme();
 
   const navigation = useContext(NavigationContext);
 
   const editProfile = () => {
-    navigation.navigate("TrustedEdit", { id, name, tel, image });
+    navigation.navigate("TrustedEdit", { name:user.name, phone: user.phone });
   };
 
   return (
