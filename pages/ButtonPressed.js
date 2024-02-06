@@ -1,21 +1,19 @@
 import CameraView from "../components/Home/CameraView";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "react-native";
-import * as Brightness from 'expo-brightness';
-import { Audio } from 'expo-av';
+import * as Brightness from "expo-brightness";
+import { Audio } from "expo-av";
 
 const LOCATION_TRACKING = "location-tracking";
 
-
-export default function ButtonPressed({navigation}) {
-
+export default function ButtonPressed({ navigation }) {
   const startLocationTracking = async () => {
     await Location.startLocationUpdatesAsync(LOCATION_TRACKING, {
       accuracy: Location.Accuracy.High,
       distanceInterval: 1,
-      deferredUpdatesInterval: 2000, 
+      deferredUpdatesInterval: 2000,
     });
     const hasStarted = await Location.hasStartedLocationUpdatesAsync(
       LOCATION_TRACKING
@@ -35,7 +33,7 @@ export default function ButtonPressed({navigation}) {
       await startLocationTracking();
     };
 
-    const startRecording = async() => {
+    const startRecording = async () => {
       try {
         await Audio.requestPermissionsAsync();
         await Audio.setAudioModeAsync({
@@ -47,35 +45,32 @@ export default function ButtonPressed({navigation}) {
         );
         await recording.startAsync();
       } catch (err) {
-        console.error('Failed to start recording', err);
+        console.error("Failed to start recording", err);
       }
-    }
+    };
 
-    const stopRecording = async()=> {
-      console.log('Stopping recording..');
+    const stopRecording = async () => {
+      console.log("Stopping recording..");
       await recording.stopAndUnloadAsync();
-      await Audio.setAudioModeAsync(
-        {
-          allowsRecordingIOS: false,
-        }
-      );
-    const uri = recording.getURI();
-    console.log(uri);
-    // const playBack = new Audio.Sound()
-    // await playBack.loadAsync({uri: uri})
-    // await playBack.playAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
+      const uri = recording.getURI();
+      console.log(uri);
+      // const playBack = new Audio.Sound()
+      // await playBack.loadAsync({uri: uri})
+      // await playBack.playAsync();
       // const asset = await MediaLibrary.createAssetAsync(uri);
       // console.log('Recording stopped and stored at', uri);
-    }
+    };
 
     config();
     startRecording();
 
     return function cleanup() {
-      stopRecording()
-      navigation.navigate("Form")
-      return Location.stopLocationUpdatesAsync(LOCATION_TRACKING)
-      ;
+      stopRecording();
+      navigation.navigate("Form");
+      return Location.stopLocationUpdatesAsync(LOCATION_TRACKING);
     };
   }, []);
   return (
@@ -86,7 +81,7 @@ export default function ButtonPressed({navigation}) {
   );
 }
 
-TaskManager.defineTask(LOCATION_TRACKING,  ({ data, error }) => {
+TaskManager.defineTask(LOCATION_TRACKING, ({ data, error }) => {
   if (error) {
     console.log("LOCATION_TRACKING task ERROR:", error);
     return;
@@ -96,6 +91,6 @@ TaskManager.defineTask(LOCATION_TRACKING,  ({ data, error }) => {
     let lat = locations[0].coords.latitude;
     let long = locations[0].coords.longitude;
     //fetch goes here
-    console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`)
-    }
+    console.log(`${new Date(Date.now()).toLocaleString()}: ${lat},${long}`);
+  }
 });

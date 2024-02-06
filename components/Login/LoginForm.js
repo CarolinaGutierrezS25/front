@@ -6,11 +6,12 @@ import { getAllPermissionsStatus } from "../../pages/Permissions";
 import colors from "../assets/colors";
 import font from "../assets/fonts";
 import { login } from "../Login/LoginService";
-import {deleteTokenStorage} from '../../helpers/tokenServices';
+import { useAuth } from "../../helpers/AuthProvider";
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const { authContext,state } = useAuth();
   const navigation = useContext(NavigationContext);
   const handleView = (view) => {
     navigation.navigate(view);
@@ -24,10 +25,12 @@ export default function LoginForm() {
 
   async function loginGood() {
     try {
-      await login({ email: correo, password: password });
-      await itHasPermissions();
+      await authContext.signIn({ email:correo, password: password });  
+      // const data = await login({ email: correo, password: password });
+      // await setAuth(data);
+
+      // await itHasPermissions();
     } catch (error) {
-      await deleteTokenStorage();
       console.log(error.toJSON());
     }
   }

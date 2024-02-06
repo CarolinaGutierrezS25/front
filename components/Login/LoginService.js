@@ -1,19 +1,15 @@
 import { postRequest } from "../../helpers/axiosRequest";
 import { MainHttp } from "@env";
-import {setTokenStorage} from '../../helpers/tokenServices';
-
 
 async function login(loginData) {
   try {
-    console.log(loginData)
     console.log(`${MainHttp}user/login`)
-    const { data, status } = await postRequest(
+    const { data } = await postRequest(
       `${MainHttp}user/login`,
       loginData,
       { withCredentials: true }
     );
-      await setTokenStorage(data.data.expiresAt);
-      return data;
+      return data.data;
   } catch (error) {
     throw error;
   }

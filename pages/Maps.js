@@ -3,15 +3,12 @@ import MapView, { Marker, Callout } from "react-native-maps";
 import { StyleSheet, View, Image } from "react-native";
 import { Card, Text, useTheme, makeStyles } from "@rneui/themed";
 import * as Location from "expo-location";
-import axios from 'axios';
-import { MainHttp } from "@env";
-
-
+import { getMaps } from "../components/Maps/MapsService";
 
 export default function Maps() {
   const [location, setLocation] = useState(null);
   const [Initiallocation, setInitialLocation] = useState(null);
-  const [exampleMarkers, setExampleMarkers] = useState(null)
+  const [exampleMarkers, setExampleMarkers] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { theme } = useTheme();
   const styles = useStyles();
@@ -44,28 +41,16 @@ export default function Maps() {
       }
       let location = await Location.getCurrentPositionAsync();
       setInitialLocation(location);
-      await fetchingData(location);
-      getCurrentPos();
+      const coords = await getMaps({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      setExampleMarkers(coords);
+      await getCurrentPos();
     })();
   }, []);
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = console.log(JSON.stringify(location));
-  }
-  async function fetchingData(location){
-    const Maps = axios.post(`${MainHttp}incident/list`, {latitude: location.coords.latitude,longitude: location.coords.longitude},{ withCredentials: true } )
-    .then(function (response) {
-      setExampleMarkers(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-      setExampleMarkers([]);
-    });
-  }
-  if (exampleMarkers==null)
+  if (exampleMarkers == null)
     return (
       <View>
         <Text>Obteniendo localizacion</Text>
@@ -143,7 +128,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     width: "80%",
     left: "10%",
-    bottom: '10%',
+    bottom: "10%",
     // padding: 8,
     // borderRadius: 10,
     backgroundColor: theme.colors.white,

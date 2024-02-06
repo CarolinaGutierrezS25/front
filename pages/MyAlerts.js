@@ -11,7 +11,7 @@ export default function MyAlerts() {
       data={Alert}
       numColumns={2}
       keyExtractor={(e) => e.id}
-      renderItem={({ item }) => <AlertCard content={item.content} id={item.id} fecha={item.fecha}/>}
+      renderItem={({ item }) => <AlertCard item={item}/>}
       style={[styles.mainView,{backgroundColor: theme.colors.background}]}
     />
   );

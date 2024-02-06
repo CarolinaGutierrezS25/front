@@ -4,9 +4,18 @@ import { Icon, makeStyles } from "@rneui/themed";
 
 export default function CardView({ route, navigation }) {
   const [content, setContent] = useState(route.params); //{fecha,content}
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
+  }
   const goBack = () => {
     navigation.goBack();
   };
+  function getPhotoList(photos){
+    return photos.map((photo,idx) => {
+      return <Text style={styles.text} id={idx+""}>{photo}</Text>;
+    });
+  }
   const styles = useStyles();
   return (
     <>
@@ -20,10 +29,14 @@ export default function CardView({ route, navigation }) {
       />
       <ScrollView style={styles.mainView}>
         <View style={styles.titleContainer}>
-          <Text style={styles.text}>{content.fecha}</Text>
+          <Text style={styles.titleText}>{formatDate(content.createdAt)}</Text>
         </View>
         <View style={styles.container}>
-          <Text style={styles.text}>{content.content}</Text>
+          <Text style={styles.text}><Text style={styles.titleText}>Latitud: </Text>{content.initial_latitude}</Text>
+          <Text style={styles.text}><Text style={styles.titleText}>Longitud: </Text>{content.initial_longitude}</Text>
+          <Text style={styles.text}><Text style={styles.titleText}>Fecha: </Text>{new Date(content.createdAt).toString()}</Text>
+          {content.audio_file? <><Text style={styles.titleText}>Link Audio:</Text><Text style={styles.text}>{content.audioUrl}</Text></>:null}
+          {content.photos_folder? <Text style={styles.titleText}>Links Fotos:</Text>:null}{content.photos_folder? getPhotoList(content.photosUrls):null}
         </View>
       </ScrollView>
     </>
@@ -57,6 +70,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.colors.primary
   },
   text: {
-    color: "black",
+    color: "rgb(70,70,70)",
   },
+  titleText:{
+    color: theme.colors.primary,
+    fontSize: 16,
+    fontWeight: "bold",
+  }
 }));

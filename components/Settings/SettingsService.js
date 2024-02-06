@@ -8,12 +8,7 @@ async function changePassword(passwordData) {
       passwordData,
       { withCredentials: true }
     );
-    if (status === 200) {
-      return data;
-    }
-    if (status === 400) {
-      throw new Error("Contraseña Anterior Incorrecta");
-    }
+    return {data, status}
   } catch (error) {
     throw error;
   }

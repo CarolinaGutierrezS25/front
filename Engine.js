@@ -24,85 +24,91 @@ import Permissions from "./pages/Permissions";
 import ButtonPressed from "./pages/ButtonPressed";
 import Form from "./pages/Form";
 import TrustedProvider from "./components/Trusted/TrustedProvider";
+import {useContext} from 'react'
+import {useAuth} from './helpers/AuthProvider';
 
-import { getTokenStorage } from "./helpers/tokenServices";
+import { View,Text } from 'react-native'
 
 export default function Engine() {
   const Stack = createNativeStackNavigator();
-  const [token, setToken] = React.useState(false);
+  const {state} = useAuth();
   const { theme } = useTheme();
-  
+
   React.useEffect(() => {
-    getTokenStorage().then((value) => {
-      setToken(value);
-    });
+    console.log(state);
   }, []);
-  
+
+
+  if(state.isLoading === true) return <View><Text>Cargando...</Text></View>
+
   return (
     <TrustedProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!token && (
+          {!state.isSignIn ? (
             <Stack.Group>
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
               <Stack.Screen name="Register" component={Register} />
             </Stack.Group>
+          ) : (
+            <>
+              <Stack.Group>
+                <Stack.Screen name="MainScreen" component={MainScreen} />
+                <Stack.Screen name="Permissions" component={Permissions} />
+                <Stack.Screen name="Form" component={Form} />
+                <Stack.Screen
+                  name="TrustedEdit"
+                  component={TrustedEdit}
+                  options={{ presentation: "modal" }}
+                />
+                <Stack.Screen
+                  name="CardView"
+                  component={CardView}
+                  options={{ presentation: "modal" }}
+                />
+              </Stack.Group>
+              <Stack.Group
+                screenOptions={{
+                  headerShown: true,
+                  headerStyle: { backgroundColor: theme.colors.white },
+                  headerTitleStyle: { color: theme.colors.black },
+                  headerTintColor: theme.colors.primary,
+                }}
+              >
+                <Stack.Screen
+                  name="Account"
+                  component={Account}
+                  options={{ title: "Account Settings" }}
+                />
+                <Stack.Screen
+                  name="Notifications"
+                  component={Notifications}
+                  options={{ title: "Notifications Settings" }}
+                />
+                <Stack.Screen
+                  name="Theme"
+                  component={Theme}
+                  options={{ title: "Theme Settings" }}
+                />
+                <Stack.Screen
+                  name="ButtonPressed"
+                  component={ButtonPressed}
+                  options={{ title: "Camera", headerShown: false }}
+                />
+                <Stack.Screen
+                  name="DeleteAccount"
+                  component={DeleteAccount}
+                  options={{ title: "Eliminar Cuenta" }}
+                />
+                <Stack.Screen
+                  name="ChangePassword"
+                  component={ChangePassword}
+                  options={{ title: "Cambiar Contraseña" }}
+                />
+              </Stack.Group>
+            </>
           )}
-          <Stack.Group>
-            <Stack.Screen name="MainScreen" component={MainScreen} />
-            <Stack.Screen name="Permissions" component={Permissions} />
-            <Stack.Screen name="Form" component={Form} />
-            <Stack.Screen
-              name="TrustedEdit"
-              component={TrustedEdit}
-              options={{ presentation: "modal" }}
-            />
-            <Stack.Screen
-              name="CardView"
-              component={CardView}
-              options={{ presentation: "modal" }}
-            />
-          </Stack.Group>
-          <Stack.Group
-            screenOptions={{
-              headerShown: true,
-              headerStyle: { backgroundColor: theme.colors.white },
-              headerTitleStyle: { color: theme.colors.black },
-              headerTintColor: theme.colors.primary,
-            }}
-          >
-            <Stack.Screen
-              name="Account"
-              component={Account}
-              options={{ title: "Account Settings" }}
-            />
-            <Stack.Screen
-              name="Notifications"
-              component={Notifications}
-              options={{ title: "Notifications Settings" }}
-            />
-            <Stack.Screen
-              name="Theme"
-              component={Theme}
-              options={{ title: "Theme Settings" }}
-            />
-            <Stack.Screen
-              name="ButtonPressed"
-              component={ButtonPressed}
-              options={{ title: "Camera", headerShown: false }}
-            />
-            <Stack.Screen
-              name="DeleteAccount"
-              component={DeleteAccount}
-              options={{ title: "Eliminar Cuenta" }}
-            />
-            <Stack.Screen
-              name="ChangePassword"
-              component={ChangePassword}
-              options={{ title: "Cambiar Contraseña" }}
-            />
-          </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
     </TrustedProvider>
