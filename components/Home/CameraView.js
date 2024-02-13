@@ -36,20 +36,19 @@ export default function CameraView() {
       name: "audio.wav",
     });
 
-    const dataPhotos = uriPhotos.map((uri, idx) => {
-      return {
+     uriPhotos.map((uri, idx) => {
+      Form.append(`photos`, {
         uri: uri,
         type: "image/jpg",
         name: `photo${idx}.jpg`,
-      };
+      });
     });
-    console.log("dataPhotos", dataPhotos);
-    Form.append("photos", dataPhotos);
-    Form.append("incidentId", JSON.stringify(incidentId));
+    
+    Form.append("incidentId", incidentId);
     try{
       const message = await incidentEnd(Form);
+      console.log(message);
     }catch(error){console.log(error.ToJSON())}
-    console.log(message);
   }
 
   //Permissions
