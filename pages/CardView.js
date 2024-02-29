@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView,ActivityIndicator } from "react-native";
 import { useState } from "react";
-import { Icon, makeStyles } from "@rneui/themed";
+import { Icon, makeStyles,Image } from "@rneui/themed";
 
 export default function CardView({ route, navigation }) {
   const [content, setContent] = useState(route.params); //{fecha,content}
@@ -13,7 +13,7 @@ export default function CardView({ route, navigation }) {
   };
   function getPhotoList(photos){
     return photos.map((photo,idx) => {
-      return <Text style={styles.text} id={idx+""}>{photo}</Text>;
+      return <Image containerStyle={styles.img} id={idx+""} source={{uri: photo}} PlaceholderContent={<ActivityIndicator/>}></Image>;
     });
   }
   const styles = useStyles();
@@ -27,6 +27,7 @@ export default function CardView({ route, navigation }) {
         containerStyle={styles.chevronContainer}
         onPress={goBack}
       />
+
       <ScrollView style={styles.mainView}>
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>{formatDate(content.createdAt)}</Text>
@@ -76,5 +77,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.colors.primary,
     fontSize: 16,
     fontWeight: "bold",
+  },
+  img:{
+      aspectRatio: 1,
+      width: '50%',
+      flex: 1,
   }
 }));
