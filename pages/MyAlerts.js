@@ -4,11 +4,11 @@ import {useTheme} from '@rneui/themed'
 import {useAlert} from '../components/MyAlerts/AlertProvider';
 export default function MyAlerts() {
   const {theme} = useTheme();
-  const Alert = useAlert()
+  const {alerts} = useAlert()
 
   return (
     <FlatList
-      data={Alert}
+      data={alerts}
       numColumns={2}
       keyExtractor={(e) => e.id}
       renderItem={({ item }) => <AlertCard item={item}/>}

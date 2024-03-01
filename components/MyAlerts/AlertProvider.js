@@ -6,16 +6,18 @@ const AlertContext = createContext(null);
 
 export default function AlertProvider({ children }) {
   const [alerts, setAlerts] = useState([]);
+  
+  async function fetchAlerts() {
+    const data = await getAlerts();
+    setAlerts(data);
+  }
+  
   useEffect(() => {
-    async function fetchAlerts() {
-      const data = await getAlerts();
-      setAlerts(data);
-    }
     fetchAlerts();
   }, []);
 
   return (
-    <AlertContext.Provider value={alerts}>{children}</AlertContext.Provider>
+    <AlertContext.Provider value={{alerts,fetchAlerts}}>{children}</AlertContext.Provider>
   );
 }
 

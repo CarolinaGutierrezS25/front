@@ -3,9 +3,11 @@ import { makeStyles, ListItem, Divider, Text } from "@rneui/themed";
 import { TouchableOpacity } from "react-native";
 import { NavigationContext } from "@react-navigation/native";
 import {useContext} from 'react'
+import {useAlert} from '../components/MyAlerts/AlertProvider';
 
 export default function Form() {
   const styles = useStyles();
+  const {fetchAlerts} = useAlert();
   const navigation = useContext(NavigationContext)
 
 
@@ -33,7 +35,7 @@ export default function Form() {
       default:
         string = "Otro";
     }
-    console.log(string);
+    fetchAlerts().then().catch();
     navigation.navigate("MainScreen")
   }
 
