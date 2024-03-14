@@ -73,7 +73,10 @@ export default function Maps() {
           <Marker key={0} coordinate={location} pinColor="blue"></Marker>
           {exampleMarkers.map((item, index) => {
             return (
-              <Marker key={index + 1} coordinate={item} title="Descripción">
+              <Marker 
+              key={index + 1} 
+              coordinate={{ latitude: item.initial_latitude, longitude: item.initial_longitude}}
+              title="Descripción">
                 <Callout tooltip style={styles.tooltip}>
                   <Card style={styles.card}>
                     <Card.Title>Incidente</Card.Title>

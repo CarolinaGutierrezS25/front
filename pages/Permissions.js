@@ -14,6 +14,7 @@ export default function Permissions({ navigation }) {
     (async () => {
       const permissions = await hasAllPermissions();
       if (permissions){
+        setLoadingPermissions(false);
         navigation.navigate("MainScreen");
       }
       setLoadingPermissions(false);

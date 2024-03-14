@@ -44,7 +44,19 @@ async function updateLocation(coords) {
         throw error;
     }
 }
+async function IncidenDescription(params) {
 
-export { incidentInit, incidentEnd, updateLocation };
+  try {
+    const { data } = await postRequest(`${MainHttp}incident/description`, params, {
+      withCredentials: true,
+    });
+    return data.data.message;
+  } catch (error) {
+    console.log("Error from Incident End",error.toJSON());
+    throw error;
+  }
+}
+
+export { incidentInit, incidentEnd, updateLocation, IncidenDescription };
 
 

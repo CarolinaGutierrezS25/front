@@ -28,8 +28,9 @@ import {useContext,useCallback} from 'react'
 import {useAuth} from './helpers/AuthProvider';
 import * as SplashScreen from "expo-splash-screen";
 import { View,Text } from 'react-native'
+import AlertProvider from './components/MyAlerts/AlertProvider';
 
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export default function Engine() {
 
@@ -47,6 +48,7 @@ export default function Engine() {
   if(state.isLoading === true) return null
 
   return (
+    <AlertProvider>
       <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {!state.isSignIn ? (
@@ -115,5 +117,6 @@ export default function Engine() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
+      </AlertProvider>
   );
 }

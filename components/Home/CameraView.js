@@ -175,7 +175,7 @@ export default function CameraView() {
       <TouchableOpacity
         style={{ flex: 1, backgroundColor: "black" }}
         onLongPress={(e) => {
-          cleanup().then(navigation.navigate("Form"));
+          cleanup().then(navigation.navigate("Form", { incidentId }));
         }}
       >
         <View style={styles.card}>

@@ -80,7 +80,7 @@ export default function CardView({ route, navigation }) {
       return (
         <Image
           containerStyle={styles.img}
-          id={idx + ""}
+          id={photo}
           source={{ uri: photo }}
           PlaceholderContent={<ActivityIndicator style={{flex:1}}/>}
         ></Image>

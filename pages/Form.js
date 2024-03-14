@@ -4,8 +4,10 @@ import { TouchableOpacity } from "react-native";
 import { NavigationContext } from "@react-navigation/native";
 import {useContext} from 'react'
 import {useAlert} from '../components/MyAlerts/AlertProvider';
+import { IncidenDescription } from "../components/Home/ButtonService";
 
-export default function Form() {
+
+export default function Form({ route }) {
   const styles = useStyles();
   const {fetchAlerts} = useAlert();
   const navigation = useContext(NavigationContext)
@@ -35,7 +37,13 @@ export default function Form() {
       default:
         string = "Otro";
     }
-    fetchAlerts().then().catch();
+    IncidenDescription({
+      incidentId: route.params.incidentId,
+      description: string,
+      category: string,
+    })
+      .then(() => fetchAlerts().then().catch())
+      .catch();
     navigation.navigate("MainScreen")
   }
 

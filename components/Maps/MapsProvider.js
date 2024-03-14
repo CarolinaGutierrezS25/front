@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMaps } from "./MapsService";
+
 const MapsContext = createContext(null);
 
 export default function MapsProvider({ children }) {
