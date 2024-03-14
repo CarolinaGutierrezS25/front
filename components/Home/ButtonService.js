@@ -3,13 +3,11 @@ import { MainHttp } from "@env";
 
 async function incidentInit(coords) {
   try {
-    console.log("Coords",coords);
     const { data } = await postRequest(
       `${MainHttp}incident/start`,
       coords,
       { withCredentials: true }
     );
-    console.log("Result from Incident Init",data);
     return data.data.incidentId;
   } catch (error) {
     console.log("Error from Incident Init",error.toJSON());

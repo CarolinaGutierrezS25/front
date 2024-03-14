@@ -1,14 +1,21 @@
 import TrustedContact from "../components/Trusted/TrustedContact.js";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView,Text } from "react-native";
 import TrustedNew from "../components/Trusted/TrustedNew";
-import { makeStyles } from "@rneui/themed";
-import { useEffect, useState } from "react";
-import { getContactList } from "../components/Trusted/TrustedService";
+import { makeStyles,LinearProgress,useTheme } from "@rneui/themed";
 import { useTrusted } from "../components/Trusted/TrustedProvider";
 
 export default function Trusted() {
   const styles = useStyles();
-  const users = useTrusted();
+  const users = useTrusted(); 
+  const { theme } = useTheme();
+  
+  if (users== null)
+  return (
+    <View style={{flex: 1, display: 'flex',justifyContent:"center",alignItems:'center',pading:15}}>
+      <LinearProgress variant="indeterminate" color={theme.colors.primary}/>
+      <Text style={{marginTop: 15}}>Obteniendo Contactos</Text>
+    </View>
+  );
 
   return (
     <View style={styles.mainView}>

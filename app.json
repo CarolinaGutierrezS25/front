@@ -1,5 +1,10 @@
 {
   "expo": {
+    "splash":{
+      "image":"./images/logo.jepg",
+      "resizeMode":"contain",
+      "backgroundColor":"#0000"
+    },
     "name": "Safety Guard",
     "slug": "Safety Guard",
     "version": "1.0.0",

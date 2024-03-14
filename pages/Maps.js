@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { StyleSheet, View, Image } from "react-native";
-import { Card, Text, useTheme, makeStyles } from "@rneui/themed";
+import { Card, Text, useTheme, makeStyles,LinearProgress } from "@rneui/themed";
 import * as Location from "expo-location";
 import { getMaps } from "../components/Maps/MapsService";
 
@@ -50,10 +50,11 @@ export default function Maps() {
     })();
   }, []);
 
-  if (exampleMarkers == null)
+  if (exampleMarkers == null || Initiallocation == null)
     return (
-      <View>
-        <Text>Obteniendo localizacion</Text>
+      <View style={{flex: 1, display: 'flex',justifyContent:"center",alignItems:'center',pading:15}}>
+        <LinearProgress variant="indeterminate" color={theme.colors.primary}/>
+        <Text style={{marginTop: 15}}>Obteniendo localizacion</Text>
       </View>
     );
 

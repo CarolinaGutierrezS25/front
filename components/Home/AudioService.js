@@ -18,8 +18,7 @@ async function startRecording(recording) {
 }
 
 async function stopRecording(recording) {
-  console.log("Stopping recording..");
-  console.log("recording", recording);
+
   await recording.stopAndUnloadAsync();
   await Audio.setAudioModeAsync({
     allowsRecordingIOS: false,

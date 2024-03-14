@@ -10,6 +10,7 @@ import { useAuth } from "../../helpers/AuthProvider";
 
 export default function LoginForm() {
   const [correo, setCorreo] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const { authContext,state } = useAuth();
   const navigation = useContext(NavigationContext);
@@ -25,7 +26,9 @@ export default function LoginForm() {
 
   async function loginGood() {
     try {
+      setLoading(true);
       await authContext.signIn({ email:correo, password: password });  
+      setLoading(false);
       // const data = await login({ email: correo, password: password });
       // await setAuth(data);
 
@@ -90,6 +93,7 @@ export default function LoginForm() {
         </View>
         <View>
           <Button
+            loading={loading}
             buttonStyle={styles.primaryButton}
             onPress={async (e) => await loginGood()}
           >

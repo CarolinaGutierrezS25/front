@@ -7,12 +7,16 @@ import Home from "../pages/Home";
 import Settings from "../pages/Settings";
 import MyAlerts from "../pages/MyAlerts";
 import Maps from "../pages/Maps";
+import TrustedProvider from '../components/Trusted/TrustedProvider';
+import AlertProvider from "../components/MyAlerts/AlertProvider"
 
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
   const { theme } = useTheme();
   return (
+    <AlertProvider>
+    <TrustedProvider>
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: true,
@@ -72,5 +76,7 @@ export default function MainScreen() {
         options={{ title: "Ajustes" }}
       />
     </Tab.Navigator>
+    </TrustedProvider>
+    </AlertProvider>
   );
 }

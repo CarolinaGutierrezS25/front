@@ -31,7 +31,7 @@ const theme = createTheme({
   },
   lightColors: {
     background: "#E0E0E0",
-    primary: "#572D61",
+    primary: "#001d35",
   },
   mode: "light",
 });

@@ -11,10 +11,10 @@ export default function UserView({user, mail, image}) {
         </View>
         <View style={styles.textView}>
             <Text style={[styles.user,{color: theme.colors.black}]}>
-                {user}
+                {mail}
             </Text>
             <Text style={[styles.mail,{color: theme.colors.grey2}]}>
-                {mail}
+                {user}
             </Text>
         </View>
     </View>

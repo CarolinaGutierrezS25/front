@@ -57,9 +57,9 @@ export default function AuthProvider({ children }) {
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
-        console.log(data)
         const userToken = await login(data);
         await AsyncStorage.setItem('token', JSON.stringify(userToken));
+        await AsyncStorage.setItem('mail', JSON.stringify(data.email));
         dispatch({ type: 'SIGN_IN', token: userToken });
       },
       signOut: async() => {

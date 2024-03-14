@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import BtnContainer from "../components/Home/BtnContainer";
 
+
 export default class Home extends Component {
     constructor(props) {
         super(props);

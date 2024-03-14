@@ -6,18 +6,23 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { Icon, makeStyles, Image } from "@rneui/themed";
+import { Icon, makeStyles, Image,Button } from "@rneui/themed";
 import { Audio } from 'expo-av';
+import theme from "../components/assets/theme";
 
 
 export default function CardView({ route, navigation }) {
   const [content, setContent] = useState(route.params); //{fecha,content}
   const [sound, setSound] = useState();
   const [playing, setPlaying] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const styles = useStyles();
+
 
   async function createSound() {
     const { sound } = await Audio.Sound.createAsync({ uri: content.audioUrl ,shouldPlay: true});
     setSound(sound);
+    setLoading(false);
   }
   async function playSound() {
     await sound.playAsync();
@@ -43,8 +48,8 @@ export default function CardView({ route, navigation }) {
   function soundPlayer(){
     return (
       <View style={styles.soundContainer}>
-        <Icon containerStyle={styles.iconSound} name={playing? "pausecircle":"play"} type="antdesign" size={40} onPress={player} ></Icon>
-        <Icon containerStyle={styles.iconSound} name="stop-circle" type="font-awesome-5" size={40}  onPress={stopSound}></Icon>
+        <Button loading={loading} onPress={player} style={styles.color} radius={"md"}><Icon  name={playing? "pausecircle":"play"} type="antdesign" size={35}  iconStyle={styles.iconStyle}></Icon></Button>
+        <Button loading={loading} onPress={stopSound} radius={"md"} ><Icon  name="stop-circle" type="font-awesome-5" size={35} iconStyle={styles.iconStyle}></Icon></Button>
       </View>
     )
   }
@@ -82,7 +87,6 @@ export default function CardView({ route, navigation }) {
       );
     });
   }
-  const styles = useStyles();
   return (
     <>
       <Icon
@@ -170,8 +174,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     paddingTop: 20,
-    paddingBottom: 20,
     gap:5
+  },
+  iconStyle: {
+    color: theme.colors.white,
   },
 
 }));

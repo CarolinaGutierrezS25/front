@@ -24,26 +24,30 @@ import Permissions from "./pages/Permissions";
 import ButtonPressed from "./pages/ButtonPressed";
 import Form from "./pages/Form";
 import TrustedProvider from "./components/Trusted/TrustedProvider";
-import {useContext} from 'react'
+import {useContext,useCallback} from 'react'
 import {useAuth} from './helpers/AuthProvider';
-
+import * as SplashScreen from "expo-splash-screen";
 import { View,Text } from 'react-native'
 
+SplashScreen.preventAutoHideAsync()
+
 export default function Engine() {
+
   const Stack = createNativeStackNavigator();
   const {state} = useAuth();
   const { theme } = useTheme();
-
-  React.useEffect(() => {
-    console.log(state);
-  }, []);
-
-
-  if(state.isLoading === true) return <View><Text>Cargando...</Text></View>
+  const onLayoutRootView = useCallback(async () => {
+    if (state.isLoading==false) {
+      setTimeout(async () => {
+        await SplashScreen.hideAsync();
+      }, 1000);
+    }
+  }, [state.isLoading]);
+  
+  if(state.isLoading === true) return null
 
   return (
-    <TrustedProvider>
-      <NavigationContainer>
+      <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           {!state.isSignIn ? (
             <Stack.Group>
@@ -54,8 +58,8 @@ export default function Engine() {
           ) : (
             <>
               <Stack.Group>
-                <Stack.Screen name="MainScreen" component={MainScreen} />
                 <Stack.Screen name="Permissions" component={Permissions} />
+                <Stack.Screen name="MainScreen" component={MainScreen} />
                 <Stack.Screen name="Form" component={Form} />
                 <Stack.Screen
                   name="TrustedEdit"
@@ -111,6 +115,5 @@ export default function Engine() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
-    </TrustedProvider>
   );
 }

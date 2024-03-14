@@ -3,11 +3,24 @@ import UserView from '../components/Settings/UserView'
 import {Divider} from '@rneui/themed'
 import SettingsList from '../components/Settings/SettingsList'
 import {useTheme} from '@rneui/themed'
+import { useEffect,useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function Settings() {
     const { theme } = useTheme();
+    const [mail, setMail] = useState(''); 
+    
+    useEffect(() => {
+        async function getMail(){
+            const mail = await AsyncStorage.getItem('mail');
+            setMail(mail?.replace(/['"]+/g, ''));
+        }
+        getMail();
+    }, [])
+
     const user = {
-        name: 'Luis',
-        mail: 'luis66850@gmail.com',
+        name: 'usuario',
+        mail: mail,
         image: "https://randomuser.me/api/portraits/men/36.jpg"
     }
     return(

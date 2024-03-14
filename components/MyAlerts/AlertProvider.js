@@ -1,16 +1,28 @@
 import { createContext, useContext, useEffect ,useState} from "react";
 import {getAlerts} from './AlertService';
-
+import {useAuth} from '../../helpers/AuthProvider';
 const AlertContext = createContext(null);
 
 
 export default function AlertProvider({ children }) {
   const [alerts, setAlerts] = useState([]);
+  const { authContext } = useAuth();
+
   
   async function fetchAlerts() {
-    const data = await getAlerts();
-    setAlerts(data);
-  }
+    try {
+      const data = await getAlerts();
+      data?.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setAlerts(data);
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        authContext.signOut();
+      }
+      else{
+        console.log(error);
+      }
+    }
+    }
   
   useEffect(() => {
     fetchAlerts();

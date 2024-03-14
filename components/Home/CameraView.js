@@ -8,7 +8,7 @@ import { Audio } from "expo-av";
 import * as Brightness from "expo-brightness";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
-import {incidentInit,incidentEnd,updateLocation} from './ButtonService';
+import { incidentInit, incidentEnd, updateLocation } from "./ButtonService";
 
 const LOCATION_TRACKING = "location-tracking";
 
@@ -18,7 +18,7 @@ export default function CameraView() {
   const [incident, setIncident] = useState();
   const [recording, setRecording] = useState();
   const [photos, setPhotos] = useState([]);
-  const [type, setType] = useState(CameraType.front);
+  const [type, setType] = useState(CameraType.back);
   const [permission, setPermission] = useState(false);
   const [face, setFace] = useState(null);
   const camRef = useRef();
@@ -36,19 +36,20 @@ export default function CameraView() {
       name: "audio.wav",
     });
 
-     uriPhotos.map((uri, idx) => {
+    uriPhotos.map((uri, idx) => {
       Form.append(`photos`, {
         uri: uri,
         type: "image/jpg",
         name: `photo${idx}.jpg`,
       });
     });
-    
+
     Form.append("incidentId", incidentId);
-    try{
+    try {
       const message = await incidentEnd(Form);
-      console.log(message);
-    }catch(error){console.log(error.ToJSON())}
+    } catch (error) {
+      console.log(error.ToJSON());
+    }
   }
 
   //Permissions
@@ -96,9 +97,14 @@ export default function CameraView() {
 
   //location Functions
   const startLocationTracking = async () => {
-    const location = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.Low});
+    const location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Low,
+    });
     console.log("location", location);
-    const res = await incidentInit({latitude: location.coords.latitude, longitude: location.coords.longitude})
+    const res = await incidentInit({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
     incidentId = res;
     console.log("incident", incidentId);
 
@@ -239,9 +245,13 @@ TaskManager.defineTask(LOCATION_TRACKING, ({ data, error }) => {
     const { locations } = data;
     let latitude = locations[0].coords.latitude;
     let longitude = locations[0].coords.longitude;
-    console.log('location',latitude,longitude);
-    
-    updateLocation({ latitude: latitude, longitude: longitude, incidentId}).then((res) => {
+    console.log("location", latitude, longitude);
+
+    updateLocation({
+      latitude: latitude,
+      longitude: longitude,
+      incidentId,
+    }).then((res) => {
       console.log(res);
     });
     // fetch goes here
