@@ -5,11 +5,14 @@ import { NavigationContext } from "@react-navigation/native";
 import {useContext} from 'react'
 import {useAlert} from '../components/MyAlerts/AlertProvider';
 import { IncidenDescription } from "../components/Home/ButtonService";
+import {useMaps} from '../components/Maps/MapsProvider';
+import {getActualPosition} from '../components/Maps/MapsService';
 
 
 export default function Form({ route }) {
   const styles = useStyles();
   const {fetchAlerts} = useAlert();
+  const {fetchMaps} = useMaps();
   const navigation = useContext(NavigationContext)
 
 
@@ -42,7 +45,9 @@ export default function Form({ route }) {
       description: string,
       category: string,
     })
-      .then(() => fetchAlerts().then().catch())
+      .then(() => {fetchAlerts().then().catch();
+      getActualPosition().then((data) => {fetchMaps(data).then().catch()}).catch();
+      })
       .catch();
     navigation.navigate("MainScreen")
   }
@@ -50,7 +55,7 @@ export default function Form({ route }) {
   return (
     <SafeAreaView style={styles.mainView}>
       <View style={styles.mainView}>
-        <Text h2 style={styles.text}>Elige la opcion que mejor describa el insidente</Text>
+        <Text h2 style={styles.text}>Elige la opcion que mejor describa el incidente</Text>
         <TouchableOpacity
           onPress={(e) => {
             togglePress(1);

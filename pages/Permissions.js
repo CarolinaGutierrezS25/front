@@ -14,10 +14,9 @@ export default function Permissions({ navigation }) {
     (async () => {
       const permissions = await hasAllPermissions();
       if (permissions){
-        setLoadingPermissions(false);
         navigation.navigate("MainScreen");
       }
-      setLoadingPermissions(false);
+      else setLoadingPermissions(false);
     })();
   }, []);
   
@@ -44,7 +43,7 @@ export default function Permissions({ navigation }) {
     navigation.navigate("MainScreen");
   }
 
-  if(loadingPermissions) return (
+  if(loadingPermissions) {return (
     <View
       style={{
         flex: 1,
@@ -60,7 +59,7 @@ export default function Permissions({ navigation }) {
       </View>
       <LinearProgress variant="indeterminate" color={theme.colors.primary}/>
     </View>
-  )
+  )}
   
   return (
     <>

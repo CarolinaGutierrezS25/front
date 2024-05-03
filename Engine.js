@@ -23,12 +23,13 @@ import CardView from "./pages/CardView";
 import Permissions from "./pages/Permissions";
 import ButtonPressed from "./pages/ButtonPressed";
 import Form from "./pages/Form";
-import TrustedProvider from "./components/Trusted/TrustedProvider";
 import {useContext,useCallback} from 'react'
 import {useAuth} from './helpers/AuthProvider';
 import * as SplashScreen from "expo-splash-screen";
-import { View,Text } from 'react-native'
+
 import AlertProvider from './components/MyAlerts/AlertProvider';
+import MapsProvider from './components/Maps/MapsProvider';
+import TrustedProvider from './components/Trusted/TrustedProvider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,6 +49,8 @@ export default function Engine() {
   if(state.isLoading === true) return null
 
   return (
+    <TrustedProvider>
+    <MapsProvider>
     <AlertProvider>
       <NavigationContainer onReady={onLayoutRootView}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -118,5 +121,7 @@ export default function Engine() {
         </Stack.Navigator>
       </NavigationContainer>
       </AlertProvider>
+      </MapsProvider>
+      </TrustedProvider>
   );
 }

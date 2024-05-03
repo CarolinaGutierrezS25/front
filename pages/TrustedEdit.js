@@ -1,9 +1,7 @@
 import { View, KeyboardAvoidingView, Text } from "react-native";
 import { useState, useEffect } from "react";
 import { Input, Icon, Button, Avatar, makeStyles, Dialog } from "@rneui/themed";
-import * as ImagePicker from "expo-image-picker";
 import { useTrustedDispatch } from "../components/Trusted/TrustedProvider";
-import {toggleAccions} from '../pages/Trusted';
 
 
 export default function TrustedEdit({ navigation, route }) {

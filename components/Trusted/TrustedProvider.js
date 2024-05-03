@@ -8,8 +8,7 @@ const TrustedContext = createContext(null);
 const TrustedDispatchContext = createContext(null);
 
 export default function TrustedProvider({ children }) {
-  const [users, setUsers] = useState([]);
-  const [state, dispatch] = useReducer(appReducer, users);
+  const [state, dispatch] = useReducer(appReducer, []);
 
   useEffect(() => {
     async function fetchUsers() {

@@ -1,15 +1,38 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker, Callout,Circle } from "react-native-maps";
 import { StyleSheet, View, Image } from "react-native";
 import { Card, Text, useTheme, makeStyles,LinearProgress } from "@rneui/themed";
 import * as Location from "expo-location";
-import { getMaps } from "../components/Maps/MapsService";
+// import { getMaps } from "../components/Maps/MapsService";
+import {useMaps} from '../components/Maps/MapsProvider';
 
 export default function Maps() {
+  // const Maps = [{
+  //   initial_latitude: 20.742973,
+  //   initial_longitude: -103.350233,
+  //   riskLevel: 0,
+  // },{
+  //   initial_latitude: 20.735973,
+  //   initial_longitude: -103.350233,
+  //   riskLevel: 1,
+  // },{
+  //   initial_latitude: 20.746973,
+  //   initial_longitude: -103.340233,
+  //   riskLevel: 2,
+  // }];
+  // const Initiallocation = {
+  //   coords: {
+  //     latitude: 20.746973,
+  //     longitude: -103.350233,
+  //   },
+  // };
+  const circleColors = ['rgba(162, 211, 162,.4)', 'rgba(245, 232, 32,.4)', 'rgba(245, 11, 9,.4)'];
+  const pinColors = ['green', 'yellow', 'red'];
   const [location, setLocation] = useState(null);
   const [Initiallocation, setInitialLocation] = useState(null);
-  const [exampleMarkers, setExampleMarkers] = useState(null);
+  // const [exampleMarkers, setExampleMarkers] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const {Maps,fetchMaps} = useMaps();
   const { theme } = useTheme();
   const styles = useStyles();
 
@@ -41,16 +64,15 @@ export default function Maps() {
       }
       let location = await Location.getCurrentPositionAsync();
       setInitialLocation(location);
-      const coords = await getMaps({
+      await fetchMaps({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-      setExampleMarkers(coords);
       await getCurrentPos();
     })();
   }, []);
 
-  if (exampleMarkers == null || Initiallocation == null)
+  if (Maps == null || Initiallocation == null)
     return (
       <View style={{flex: 1, display: 'flex',justifyContent:"center",alignItems:'center',pading:15}}>
         <LinearProgress variant="indeterminate" color={theme.colors.primary}/>
@@ -61,22 +83,59 @@ export default function Maps() {
   return (
     <>
       <View style={styles.container}>
+      <View style={styles.danger}>
+        <Text style={{alignSelf:'center',fontWeight:'600'}}>
+          Niveles de peligro 
+        </Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}} >
+          <View style={{flexDirection: 'row', alignItems: 'center',paddingTop:9}}>
+            <View style={{width: 20, height: 20, backgroundColor: circleColors[0], borderRadius: 10}}></View>
+            <Text> Bajo</Text>
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center',paddingTop:9}}>
+            <View style={{width: 20, height: 20, backgroundColor: circleColors[1], borderRadius: 10}}></View>
+            <Text> Medio</Text>
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center',paddingTop:9}}>
+            <View style={{width: 20, height: 20, backgroundColor: circleColors[2], borderRadius: 10}}></View>
+            <Text> Alto</Text>
+          </View>
+      </View>
+      </View>
         <MapView
           style={styles.map}
-          region={{
+          initialRegion={{
             latitude: Initiallocation.coords.latitude,
             longitude: Initiallocation.coords.longitude,
             latitudeDelta: 0.04,
             longitudeDelta: 0.1,
           }}
         >
-          <Marker key={0} coordinate={location} pinColor="blue"></Marker>
-          {exampleMarkers.map((item, index) => {
+          <Marker key={0} coordinate={location} pinColor="blue">
+            <Callout tooltip style={styles.tooltip}>
+              <Card style={styles.card}>
+                <Card.Title>Ubicación Actual</Card.Title>
+                <Card.Divider></Card.Divider>
+                <Text>
+                  <Text style={styles.text}>Latitud: </Text>
+                  {location.latitude}
+                </Text>
+                <Text>
+                  <Text style={styles.text}>Longitud: </Text>
+                  {location.longitude}
+                </Text>
+              </Card>
+            </Callout>
+          </Marker>
+          {Maps.map((item, index) => {
             return (
+              <>
               <Marker 
               key={index + 1} 
               coordinate={{ latitude: item.initial_latitude, longitude: item.initial_longitude}}
-              title="Descripción">
+              title="Descripción"
+              pinColor={pinColors[item.riskLevel]}
+              >
                 <Callout tooltip style={styles.tooltip}>
                   <Card style={styles.card}>
                     <Card.Title>Incidente</Card.Title>
@@ -99,6 +158,8 @@ export default function Maps() {
                   </Card>
                 </Callout>
               </Marker>
+              <Circle key={index + Maps.length + 1 } center={{ latitude: item.initial_latitude, longitude: item.initial_longitude}} radius={500} strokeColor={circleColors[item.riskLevel]} fillColor={circleColors[item.riskLevel]}/>
+              </>
             );
           })}
         </MapView>
@@ -124,14 +185,15 @@ const useStyles = makeStyles((theme) => ({
   },
   tooltip: {
     maxWidth: 180,
+    zIndex: 2,
   },
   text: {
     fontWeight: "bold",
   },
   band: {
     padding: 10,
-    width: "80%",
-    left: "10%",
+    width: "90%",
+    left: "5%",
     bottom: "10%",
     // padding: 8,
     // borderRadius: 10,
@@ -140,5 +202,15 @@ const useStyles = makeStyles((theme) => ({
   },
   inner: {
     textAlign: "center",
+  },
+  danger: {
+    zIndex: 1,
+    position: "absolute", 
+    width: "90%",
+    left: "5%",
+    top: 15,
+    padding: 10,
+    backgroundColor: theme.colors.white,
+    borderRadius: 10,
   },
 }));

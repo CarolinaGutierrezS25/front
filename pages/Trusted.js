@@ -2,12 +2,26 @@ import TrustedContact from "../components/Trusted/TrustedContact.js";
 import { View, ScrollView,Text } from "react-native";
 import TrustedNew from "../components/Trusted/TrustedNew";
 import { makeStyles,LinearProgress,useTheme } from "@rneui/themed";
-import { useTrusted } from "../components/Trusted/TrustedProvider";
+import { useTrusted,useTrustedDispatch } from "../components/Trusted/TrustedProvider";
+import { useEffect } from "react";
+import {getContactList} from '../components/Trusted/TrustedService.js';
 
 export default function Trusted() {
   const styles = useStyles();
   const users = useTrusted(); 
+  const dispatch = useTrustedDispatch();
   const { theme } = useTheme();
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const data = await getContactList();
+      dispatch({ type: "FETCH", payload: data });
+    }
+    if(users==null || users.length==0){
+      fetchUsers();
+    }
+  
+  }, []);
   
   if (users== null)
   return (
